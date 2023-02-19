@@ -14,8 +14,6 @@ function Page() {
     const [ id, setId ] = useState<number>(-1)
     const { data: IPaddress } = useProjectFactoryIdentityProvider();
     const { data: balance } = useBalance(address)
-    // CONST = https://shuttle-9.estuary.tech/gw/ipfs/bafkreicffpxbqxni5qdthwigzrz7jz6nffdzv3thi762xxiqgaqstiuygu/
-    //end table data
     useEffect(() => {
         if (isConnected && chain) {
             console.log("connected")
