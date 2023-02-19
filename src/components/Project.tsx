@@ -135,7 +135,7 @@ const Project: React.FC<ActualTableProps> = ({ address, id, zipCode }) => {
         }))
         setIpfsArray(_ipfsArray);
 
-        const tx = await identityProvider?.addPhotos(address as `0x${string}`, BigNumber.from(0), _ipfsArray.map((ipfs) => ipfs as `0x${string}`));
+        const tx = await identityProvider?.addPhotos(address as `0x${string}`, BigNumber.from(id), _ipfsArray.map((ipfs) => ipfs as `0x${string}`));
         await tx?.wait();
     }
 

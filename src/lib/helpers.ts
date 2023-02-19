@@ -163,7 +163,9 @@ export const getMyIdentity = async (provider: Provider, address: string): Promis
     if (!events[0]) {
         return -1
     } else {
-        return (events[0].args![2] as ethers.BigNumber).toNumber()
+        const ans = (events[0].args![2] as ethers.BigNumber).toNumber()
+        console.log(ans, address)
+        return ans
     }
 }
 
