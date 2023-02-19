@@ -169,7 +169,8 @@ const Project: React.FC<ActualTableProps> = ({ address, id, zipCode }) => {
     useEffect(() => {
         const fetchProject = async () => {
             if (!project_contract) return;
-            const ipfs_gateway = `https://gateway.pinata.cloud/ipfs/${ipfs}`
+            const ipfs_gateway = `http://gateway.pinata.cloud/ipfs/${ipfs}`
+            
             const response = await fetch(ipfs_gateway);
             const data = await response.json() as Project;
             setProject(data);
@@ -181,7 +182,7 @@ const Project: React.FC<ActualTableProps> = ({ address, id, zipCode }) => {
 
         <div>
             {project /*asserting that project is defined*/ &&
-                <div className={`${zipCode === '' || project.zipcode === undefined || project.zipcode.slice(0, zipCode.length) === zipCode ? '' : 'hidden'}`} >
+                <div className="" >
                     <div className="transition-all border border-solid border-gray rounded-lg p-4 shadow-md bg-white mx-auto mx-4 mb-4">
                         <div className='flex justify-between pb-8'>
                             <div className='flex flex-col justify-between items-left flex-1'>
