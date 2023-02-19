@@ -12,13 +12,12 @@ export const config = {
 };
 
 const post = async (req, res) => {
-    console.log("Here")
     const form = new formidable.IncomingForm();
     form.parse(req, async (err, fields, files) => {
   
         var oldPath = files.file.filepath;
         const ipfs = await uploadFile(oldPath)
-        return res.send({ipfsHash: ipfs.IpfsHash})
+        return res.send({IpfsHash: ipfs.IpfsHash})
     })
 };
 

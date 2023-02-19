@@ -1,4 +1,4 @@
-import { JWT, PINATA_BASE_URL, SingleImageResponse, SingleJSONResponse } from "./constants"
+import { JWT, PINATA_BASE_URL, SingleIPFSResponse } from "./constants"
 import axios from "axios";
 import { Project } from "./constants";
 
@@ -10,8 +10,8 @@ export const uploadImage = async (file: File): Promise<string> => {
         method: "POST",
         body
     });
-    const data = await response.json() as SingleImageResponse;
-    return data.ipfsHash;
+    const data = await response.json() as SingleIPFSResponse;
+    return data.IpfsHash;
 }
 
 export const uploadProject = async (project: Project): Promise<string> => {
@@ -19,7 +19,7 @@ export const uploadProject = async (project: Project): Promise<string> => {
         method: "POST",
         body: JSON.stringify(project)
     });
-    const data = await response.json() as SingleJSONResponse;
+    const data = await response.json() as SingleIPFSResponse;
     return data.IpfsHash;
 }
 

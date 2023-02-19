@@ -12,10 +12,11 @@ import { uploadImage } from '../lib/pinata/requests';
 import { BiLeftArrow, BiRightArrow } from 'react-icons/bi';
 type ActualTableProps = {
     address: string,
-    id: number
+    id: number,
+    zipCode: string
 }
 
-const Project: React.FC<ActualTableProps> = ({ address, id }) => {
+const Project: React.FC<ActualTableProps> = ({ address, id, zipCode }) => {
     const { provider } = useClient()
     const { data: signerData } = useSigner();
     const { address: my_address } = useAccount();
@@ -187,9 +188,11 @@ const Project: React.FC<ActualTableProps> = ({ address, id }) => {
     }, [])
 
     return (
-        <div className="border border-solid border-gray rounded-lg p-4 shadow-md bg-white mx-auto mx-4 mb-4">
+        
+        <div>
             {project /*asserting that project is defined*/ &&
-                <div>
+                <div className={`${zipCode==='' || project.zipcode===undefined ||project.zipcode.slice(0, zipCode.length) === zipCode ? '' : 'hidden'}`} >
+                <div className="border border-solid border-gray rounded-lg p-4 shadow-md bg-white mx-auto mx-4 mb-4">
                     <div className='flex justify-between pb-8'>
                         <div className='flex-col justify-between items-center flex-1'>
                             <div className='flex-col pb-8 items-center'>
@@ -321,8 +324,10 @@ const Project: React.FC<ActualTableProps> = ({ address, id }) => {
                         </div>
                     </div>
                 </div>
+                </div>
             }
         </div >
+        
     );
 };
 

@@ -18,7 +18,6 @@ const post = async (req, res) => {
         "pinataContent": json
     });
 
-    console.log('data: ', data)
 
     var config = {
         method: 'post',
@@ -31,8 +30,7 @@ const post = async (req, res) => {
     };
 
     const response = await axios(config);
-    console.log("api", response.data);
-    res.status(200).json(response.data);
+    res.status(200).send(response.data);
 };
 
 export default (req, res) => {
