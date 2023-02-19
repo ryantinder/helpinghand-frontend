@@ -13,16 +13,16 @@ export default defineConfig({
         contracts: [
             {
                 name: "ProjectFactory",
-                address: "0xf8af87b21e049659495d57416a8b34c55c6e4cce"
+                address: "0xFC40A788787CC7D27Fb8888e5Dee08B4FfF1F341"
             },
             {
                 name: "IdentityProvider",
-                address: "0x1ed0A95A237b63D55128Dd53D3877B50cB97B9a0"
+                address: "0x77F155bAb80FC4941010f0dC758DB7613e9E2D91"
             }
         ]
     }),
     foundry({
-        project: '../my-project',
+        project: '../treehacks/my-project',
         include: ['Project.json']
     }),
     react()

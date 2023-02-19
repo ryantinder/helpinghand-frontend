@@ -10,7 +10,7 @@ const teamMembers = [
   {
     name: 'Trent Conley',
     bio: 'Trent is a low-tier mortal who developed the measly frontend.',
-    image: '/ryan.png',
+    image: '/trent.jpeg',
   },
 ];
 

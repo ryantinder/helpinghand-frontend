@@ -24,6 +24,7 @@ export function MintNFT() {
         data: txData,
         isSuccess: txSuccess,
         error: txError,
+        isLoading: isTxLoading,
     } = useWaitForTransaction({
         hash: mintData?.hash,
     });
@@ -38,7 +39,7 @@ export function MintNFT() {
                 onClick={() => { mint?.() }}
                 className="bg-blue-600 text-white rounded-full px-6 py-3 text-3xl font-bold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed">
 
-                {id != -1 ? "Already Minted!" : isMintLoading ? 'Minting...' : 'Mint'}
+                {id != -1 ? "Already Minted!" : isMintLoading || isTxLoading ? 'Minting...' : 'Mint'}
             </button>
             {txSuccess && (
                 <div className="font-bold mt-2">

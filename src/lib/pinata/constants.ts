@@ -13,7 +13,7 @@ export interface SingleJSONResponse {
 
 export interface Project {
     name: string;
-    location: string;
+    zipcode: string;
     description: string;
     pictures: string[];
 };

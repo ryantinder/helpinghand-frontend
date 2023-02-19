@@ -8,8 +8,8 @@ import { getBytes32FromIpfsHash } from '../lib/helpers'
 function UploadForm() {
     const { data: signerData } = useSigner()
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-    const [formData, setFormData] = useState({ name: '', location: '', description: '' });
-    const [project, setProject] = useState({ name: '', location: '', description: '', pictures: [""] });
+    const [formData, setFormData] = useState({ name: '', zipcode: '', description: '' });
+    const [project, setProject] = useState({ name: '', zipcode: '', description: '', pictures: [""] });
     const [project_ipfs, setProjectIPFS] = useState("");
     const { config } = usePrepareProjectFactoryCreateProject({
         args: [project_ipfs, "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8"]
@@ -42,6 +42,12 @@ function UploadForm() {
             newFiles.push(event.target.files[i]);
         }
         setSelectedFiles([...selectedFiles, ...newFiles])
+        for (const file of newFiles) {
+            const img = document.createElement("img");
+            img.src = URL.createObjectURL(file);
+            img.className = "h-32 w-32 object-cover rounded-sm";
+            document.getElementById("image-container")?.appendChild(img);
+        }
     };
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,7 +66,7 @@ function UploadForm() {
             ...formData,
             pictures: ipfs_array
         })
-        console.log(ipfs)
+
         const b32_ipfs =
             getBytes32FromIpfsHash(
                 ipfs
@@ -71,16 +77,16 @@ function UploadForm() {
         // here is where the transaction will go.
 
         // Reset the form and clear the selected files
-        setFormData({ name: '', location: '', description: '' });
-        setProject({ name: '', location: '', description: '', pictures: [""] });
+        setFormData({ name: '', zipcode: '', description: '' });
+        setProject({ name: '', zipcode: '', description: '', pictures: [""] });
     };
 
     return (
 
         <div>
-            <div className="flex flex-col items-center justify-center">
+            <div className="flex flex-col items-center justify-center py-8">
                 <h1 className="text-2xl font-bold mb-4 text-center text-gray-700 uppercase tracking-widest">
-                    Enter Project Name, Location, and Description
+                    Enter Project Name, Zipcode, and Description
                 </h1>
                 <form onSubmit={handleSubmit} className="w-74 flex flex-col items-center gap-4">
                     <div className="flex flex-col items-center gap-4 py-5">
@@ -102,10 +108,10 @@ function UploadForm() {
                         />
                         <input
                             type="text"
-                            name="location"
-                            value={formData.location}
+                            name="zipcode"
+                            value={formData.zipcode}
                             onChange={handleInputChange}
-                            placeholder="Location"
+                            placeholder="Zipcode"
                             className="text-sm font-semibold text-gray-500 border border-gray-400 rounded-lg py-2 px-4 focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500"
                         />
                         <input
