@@ -10,8 +10,7 @@ const pinFileToIPFS = async () => {
     
     const file = fs.createReadStream(src)
     formData.append('file', file)
-    // console.log(formData)
-    // return;
+
     const metadata = JSON.stringify({
       name: 'File name',
     });
@@ -30,7 +29,6 @@ const pinFileToIPFS = async () => {
           Authorization: JWT
         }
       });
-      console.log(res.data);
     } catch (error) {
       console.log(error);
     }

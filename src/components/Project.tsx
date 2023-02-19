@@ -1,15 +1,13 @@
 import { BigNumber, ethers } from 'ethers';
 import React, { useEffect, useState } from 'react';
-import { Modal } from 'react-bootstrap';
-import { useAccount, useClient, useContract, useContractRead, useSigner, useWaitForTransaction } from 'wagmi';
+import { useAccount, useSigner, useWaitForTransaction } from 'wagmi';
 import { useErc20, useErc20BalanceOf, useIdentityProvider, useIdentityProviderAddPhotos, useIdentityProviderGetPhotos, usePrepareIdentityProviderAddPhotos, usePrepareProjectEndProject, usePrepareProjectEnter, usePrepareProjectExit, usePrepareProjectRemoveParticipants, useProject, useProjectAsset, useProjectEndProject, useProjectEnter, useProjectExit, useProjectGetContributors, useProjectHost, useProjectIpfs, useProjectRemoveParticipants } from '../generated';
 import { BigNumberArrayIncludes, getBytes32FromIpfsHash, getIpfsHashFromBytes32, projectAbi } from '../lib/helpers';
 import { Project } from '../lib/pinata/constants';
-import DonateButton from './Donate';
-import JoinButton from './Donate';
 import Link from "next/link"
 import { uploadImage } from '../lib/pinata/requests';
-import { BiLeftArrow, BiRightArrow } from 'react-icons/bi';
+import { IoIosArrowForward, IoIosArrowBack } from 'react-icons/io';
+
 type ActualTableProps = {
     address: string,
     id: number,
@@ -17,16 +15,9 @@ type ActualTableProps = {
 }
 
 const Project: React.FC<ActualTableProps> = ({ address, id, zipCode }) => {
-    const { provider } = useClient()
     const { data: signerData } = useSigner();
     const { address: my_address } = useAccount();
-    async function donate() {
-        console.log("Going to donate some money");
-    }
 
-    async function admin() {
-        console.log("going to manage the project");
-    }
     const [picIter, setPicIter] = useState<number>(0);
     const [project, setProject] = useState<Project>();
     const [donation, setDonation] = useState<number>(0);
@@ -132,7 +123,6 @@ const Project: React.FC<ActualTableProps> = ({ address, id, zipCode }) => {
     const [newImages, setNewImages] = useState<File[]>([]);
     const progressHandler = async (event: React.ChangeEvent<HTMLInputElement>) => {
         if (!event.target.files) return;
-        console.log(event.target.files);
         const newFiles: File[] = [];
         for (let i = 0; i < event.target.files.length; i++) {
             newFiles.push(event.target.files[i]);
@@ -188,146 +178,146 @@ const Project: React.FC<ActualTableProps> = ({ address, id, zipCode }) => {
     }, [])
 
     return (
-        
+
         <div>
             {project /*asserting that project is defined*/ &&
-                <div className={`${zipCode==='' || project.zipcode===undefined ||project.zipcode.slice(0, zipCode.length) === zipCode ? '' : 'hidden'}`} >
-                <div className="border border-solid border-gray rounded-lg p-4 shadow-md bg-white mx-auto mx-4 mb-4">
-                    <div className='flex justify-between pb-8'>
-                        <div className='flex-col justify-between items-center flex-1'>
-                            <div className='flex-col pb-8 items-center'>
-                                <div className="">
-                                    <p className="text-3xl font-bold">{project.name}</p>
-                                </div>
-                                <div className="flex gap-2">
-                                    <p className="">Zip Code:</p>
-                                    <p className="">{project.zipcode}</p>
-                                </div>
-                                <div className='flex gap-2'>
-                                    <p>Bounty:</p>
-                                    <p>{bounty && ethers.utils.formatUnits(bounty, 6)} USDC</p>
-                                </div>
-                                <div className='flex gap-2'>
-                                    <p>Participants:</p>
-                                    <p>{contributors?.length}</p>
-                                </div>
-                            </div>
-                            <div className="snap-center">
-                                <p className=''>Directions</p>
-                                <p className="">{project.description}</p>
-                            </div>
-
-                        </div>
-                        <div className="flex flex-1 items-center">
-                            <button className='text-5xl font-bold' onClick={() => setPicIter(picIter == 0 ? 0 : picIter - 1)}>
-                                <BiLeftArrow style ={{ color: "gray"}}/>
-                            </button>
-                            <div className='mx-auto'>
-                                <img src={"https://gateway.pinata.cloud/ipfs/" + project.pictures[picIter]} alt="prefix ignore" />
-                            </div>
-                            <button className='text-5xl font-bold' onClick={() => setPicIter(picIter == project.pictures.length - 1 ? picIter : picIter + 1)}>
-                            <BiRightArrow style ={{ color: "gray"}}/>
-                            </button>
-                        </div>
-
-
-                    </div>
-                    
-                    {contributors && BigNumberArrayIncludes(contributors, id) ? (
-                        <div>
-                            <div className='w-full border-gray border-b-2'>My Submissions</div>
-                            <div className='my-4 flex overflow-x-auto gap-3'>
-                                {photos?.map((photo, index) => {
-                                    return (
-                                        <div key={index}>
-                                            <img src={`https://gateway.pinata.cloud/ipfs/${getIpfsHashFromBytes32(photo)}`} className='w-32 h-32 object-cover rounded-md shadow-md' alt="prefix ignore" />
-                                        </div>
-                                    )
-                                })}
-                            </div>
-                        </div>) : (<></>)
-                    }
-
-
-
-
-                    <div className='flex justify-between'>
-                        {
-                            (id === -1) ? (
-                                <Link
-                                    href="/get-worker-nft"
-                                    passHref
-                                    className='bg-blue-500 rounded-lg p-2 text-white font-bold px-6'
-                                >
-                                    Mint NFT
-                                </Link>
-                            ) :
-                                (host === my_address) ? (
-                                    <div className='flex gap-2'>
-                                        <div>
-                                            <button id="end" onClick={async () => {
-                                                endProject?.();
-                                            }} className="inline-block text-left float-right hidden" />
-                                            <label htmlFor="end" className="hover:cursor-pointer inline-block text-right float-left bg-red-500 rounded-lg p-2 text-white font-bold px-6">
-                                                {isEndingingProject ? "Release Funds..." : "Release Funds"}
-                                            </label>
-                                        </div>
-                                        <div>
-                                            <button id="end" onClick={async () => {
-                                                if (selectedParticipants.length > 0) removeParticipantsProject?.();
-                                            }} className="inline-block text-left float-right hidden" />
-                                            <label htmlFor="end" className="hover:cursor-pointer inline-block text-right float-left bg-red-500 rounded-lg p-2 text-white font-bold px-6">Remove Participants</label>
-                                        </div>
+                <div className={`${zipCode === '' || project.zipcode === undefined || project.zipcode.slice(0, zipCode.length) === zipCode ? '' : 'hidden'}`} >
+                    <div className="transition-all border border-solid border-gray rounded-lg p-4 shadow-md bg-white mx-auto mx-4 mb-4">
+                        <div className='flex justify-between pb-8'>
+                            <div className='flex flex-col justify-between items-left flex-1'>
+                                <div className='flex-col pb-8 items-left'>
+                                    <div className="">
+                                        <p className="text-3xl font-bold">{project.name}</p>
                                     </div>
-                                ) : (
-                                    contributors && BigNumberArrayIncludes(contributors, id) ? (
+                                    <div className="flex gap-2 py-1">
+                                        <p className="font-bold">Zip Code:</p>
+                                        <p className="">{project.zipcode}</p>
+                                    </div>
+                                    <div className='flex gap-2'>
+                                        <p className='font-bold'>Bounty:</p>
+                                        <p>{bounty && ethers.utils.formatUnits(bounty, 6)} USDC</p>
+                                    </div>
+                                    <div className='flex gap-2'>
+                                        <p className='font-bold'>Participants:</p>
+                                        <p>{contributors?.length}</p>
+                                    </div>
+                                </div>
+                                <div className="snap-center flex flex-col flex-1 bg-gray-100 rounded-lg p-2">
+                                    <p className='font-bold'>Directions</p>
+                                    <p className="h-full w-full flex-1">{project.description}</p>
+                                </div>
+
+                            </div>
+                            <div className="flex flex-1 items-center">
+                                <button className='text-5xl font-bold' onClick={() => setPicIter(picIter == 0 ? 0 : picIter - 1)}>
+                                    <IoIosArrowBack style={{ color: "gray" }} />
+                                </button>
+                                <div className='mx-auto'>
+                                    <img className='w-80 h-80 object-cover' src={"https://gateway.pinata.cloud/ipfs/" + project.pictures[picIter]} alt="prefix ignore" />
+                                </div>
+                                <button className='text-5xl font-bold' onClick={() => setPicIter(picIter == project.pictures.length - 1 ? picIter : picIter + 1)}>
+                                    <IoIosArrowForward style={{ color: "gray" }} />
+                                </button>
+                            </div>
+
+
+                        </div>
+
+                        {contributors && BigNumberArrayIncludes(contributors, id) ? (
+                            <div>
+                                <div className='w-full border-gray border-b-2'>My Submissions</div>
+                                <div className='my-4 flex overflow-x-auto gap-3'>
+                                    {photos?.map((photo, index) => {
+                                        return (
+                                            <div key={index}>
+                                                <img src={`https://gateway.pinata.cloud/ipfs/${getIpfsHashFromBytes32(photo)}`} className='w-32 h-32 object-cover rounded-md shadow-md' alt="prefix ignore" />
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            </div>) : (<></>)
+                        }
+
+
+
+
+                        <div className='flex justify-between'>
+                            {
+                                (id === -1) ? (
+                                    <Link
+                                        href="/get-worker-nft"
+                                        passHref
+                                        className='bg-blue-500 rounded-lg p-2 text-white font-bold px-6'
+                                    >
+                                        Mint NFT
+                                    </Link>
+                                ) :
+                                    (host === my_address) ? (
                                         <div className='flex gap-2'>
                                             <div>
-                                                <input id="upload" disabled={isUploading} type="file" onChange={progressHandler} className="inline-block text-left float-right hidden" multiple />
-                                                <label htmlFor="upload" className="hover:cursor-pointer inline-block text-right float-left bg-blue-500 rounded-lg p-2 text-white font-bold px-6">
-                                                    {newImages.length == 0 ? "Upload" : `${newImages.length} Uploaded`}
+                                                <button id="end" onClick={async () => {
+                                                    endProject?.();
+                                                }} className="inline-block text-left float-right hidden" />
+                                                <label htmlFor="end" className="hover:cursor-pointer inline-block text-right float-left bg-red-500 rounded-lg p-2 text-white font-bold px-6">
+                                                    {isEndingingProject ? "Release Funds..." : "Release Funds"}
                                                 </label>
                                             </div>
                                             <div>
-                                                <button id="exit" onClick={async () => {
-                                                    exitProject?.()
+                                                <button id="end" onClick={async () => {
+                                                    if (selectedParticipants.length > 0) removeParticipantsProject?.();
                                                 }} className="inline-block text-left float-right hidden" />
-                                                <label htmlFor="exit" className="hover:cursor-pointer inline-block text-right float-left bg-red-500 rounded-lg p-2 text-white font-bold px-6">
-                                                    {isExitingProject ? "Abandoning..." : "Abandon"}
-                                                </label>
+                                                <label htmlFor="end" className="hover:cursor-pointer inline-block text-right float-left bg-red-500 rounded-lg p-2 text-white font-bold px-6">Remove Participants</label>
                                             </div>
                                         </div>
                                     ) : (
-                                        <button
-                                            className='hover:cursor-pointer bg-blue-500 rounded-lg p-2 text-white font-bold px-6'
-                                            onClick={async () => {
-                                                if (id != -1) enterProject?.();
-                                            }}>
-                                            {isEnteringProject ? "Joining..." : "Join"}
-                                        </button>
+                                        contributors && BigNumberArrayIncludes(contributors, id) ? (
+                                            <div className='flex gap-2'>
+                                                <div>
+                                                    <input id="upload" disabled={isUploading} type="file" onChange={progressHandler} className="inline-block text-left float-right hidden" multiple />
+                                                    <label htmlFor="upload" className="hover:cursor-pointer inline-block text-right float-left bg-blue-500 rounded-lg p-2 text-white font-bold px-6">
+                                                        {newImages.length == 0 ? "Upload" : `${newImages.length} Uploaded`}
+                                                    </label>
+                                                </div>
+                                                <div>
+                                                    <button id="exit" onClick={async () => {
+                                                        exitProject?.()
+                                                    }} className="inline-block text-left float-right hidden" />
+                                                    <label htmlFor="exit" className="hover:cursor-pointer inline-block text-right float-left bg-red-500 rounded-lg p-2 text-white font-bold px-6">
+                                                        {isExitingProject ? "Abandoning..." : "Abandon"}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <button
+                                                className='hover:cursor-pointer bg-blue-500 rounded-lg p-2 text-white font-bold px-6'
+                                                onClick={async () => {
+                                                    if (id != -1) enterProject?.();
+                                                }}>
+                                                {isEnteringProject ? "Joining..." : "Join"}
+                                            </button>
+                                        )
                                     )
-                                )
-                        }
+                            }
 
-                        <div className='flex items-center gap-4'>
-                            <img src='https://assets.coingecko.com/coins/images/6319/small/USD_Coin_icon.png?1547042389' className='rounded-full w-8 h-8 object-cover'></img>
-                            <input
-                                className={`${donation > parseFloat(ethers.utils.formatUnits(balance as ethers.BigNumber, 6)) ? 'border-red-500' : 'border-gray'} border-2 rounded-lg text-right w-20 p-2`}
-                                placeholder={"0"}
-                                type="number"
-                                value={donation}
-                                onChange={(e) => { setDonation(parseFloat(e.target.value)) }}>
-                            </input>
-                            <button className='bg-green-500 rounded-lg p-2 text-white px-6' onClick={donateHandler}>
-                                Donate
-                            </button>
+                            <div className='flex items-center gap-4'>
+                                <img src='https://assets.coingecko.com/coins/images/6319/small/USD_Coin_icon.png?1547042389' className='rounded-full w-8 h-8 object-cover'></img>
+                                <input
+                                    className={`${donation > parseFloat(ethers.utils.formatUnits(balance as ethers.BigNumber, 6)) ? 'border-red-500' : 'border-gray'} border-2 rounded-lg text-right w-20 p-2`}
+                                    placeholder={"0"}
+                                    type="number"
+                                    value={donation}
+                                    onChange={(e) => { setDonation(parseFloat(e.target.value)) }}>
+                                </input>
+                                <button className='bg-green-500 rounded-lg p-2 text-white px-6' onClick={donateHandler}>
+                                    Donate
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-                </div>
             }
         </div >
-        
+
     );
 };
 

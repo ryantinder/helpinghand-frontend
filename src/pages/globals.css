@@ -5,7 +5,13 @@
 * {
     transition: all;
 }
-
+.mask:after {
+    mask: linear-gradient(rgb(255 255 255) 0 0) content-box,
+      linear-gradient(rgb(255 255 255) 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
 .seamless-input {
     border: 1px solid black;
     border-radius: 10px;
@@ -31,4 +37,21 @@
     outline: none;
     font-size: 1.2em;
     font-weight: 700;
+  }
+
+  @keyframes fade-in-up {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .animate-fade-in-up {
+    animation-name: fade-in-up;
+    animation-duration: 1.5s;
+    animation-fill-mode: both;
   }

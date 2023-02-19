@@ -16,12 +16,10 @@ function Page() {
     const { data: balance } = useBalance(address)
     useEffect(() => {
         if (isConnected && chain) {
-            console.log("connected")
             getProjects(client.provider).then(setAddresses)
             getMyIdentity(client.provider, address as string).then(setId)
         } else {
             setAddresses([])
-            console.log("not connected")
         }
     }, [isConnected, chain])
     return (

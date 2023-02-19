@@ -170,10 +170,8 @@ export const getMyIdentity = async (provider: Provider, address: string): Promis
 export async function getProjects(provider: ethers.providers.Provider) {
     const con = new ethers.Contract(projectFactoryAddress[42161], projectFactoryABI, provider)
     // const IPAddress = await con.identityProvider()
-    // console.log('addr', IPAddress)
     const events = await con.queryFilter(con.filters.ProjectCreated())
     const ret = events.map((event) => event.args?.project)
-    console.log(ret)
     return ret;
 }
 

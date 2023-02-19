@@ -13,11 +13,11 @@ export default defineConfig({
         contracts: [
             {
                 name: "ProjectFactory",
-                address: "0xFC40A788787CC7D27Fb8888e5Dee08B4FfF1F341"
+                address: "0x4e78499BE4B9B10ce8504296ff3c05ceBA556380"
             },
             {
                 name: "IdentityProvider",
-                address: "0x77F155bAb80FC4941010f0dC758DB7613e9E2D91"
+                address: "0xf9c4E7e36A0738972aAcaF6a9814CD7FeDEFcc5D"
             }
         ]
     }),

@@ -22,11 +22,6 @@ const post = async (req, res) => {
 };
 
 const uploadFile = async (path) => {
-    // console.log(_file)
-//   const data = fs.readFileSync(_file.path);
-//   fs.writeFileSync(`./public/${_file.name}`, data);
-//   await fs.unlinkSync(_file.path);
-
   const formData = new FormData();
   
   const file = fs.createReadStream(path)

@@ -169,7 +169,6 @@ const project = new ethers.Contract("0xC82B35678D3f67AaCA062Fe1F1Fd70a8caF886F1"
 
 async function main() {
     const ipfs = await project.ipfs()
-    console.log(ipfs)
 }
 
 main().then()

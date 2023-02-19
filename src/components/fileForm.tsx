@@ -14,13 +14,11 @@ function FileUpload() {
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        console.log('submit', selectedFile);
         // Submit the form or do something else with the file data
       }
 
     if (selectedFile) {
       // Do something with the selected file, such as upload it to a server
-      console.log(`Selected file: ${selectedFile.name}`);
     }
 
   return (
