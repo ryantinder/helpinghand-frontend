@@ -169,7 +169,7 @@ const Project: React.FC<ActualTableProps> = ({ address, id, zipCode }) => {
     useEffect(() => {
         const fetchProject = async () => {
             if (!project_contract) return;
-            const ipfs_gateway = `http://gateway.pinata.cloud/ipfs/${ipfs}`
+            const ipfs_gateway = `https://gateway.pinata.cloud/ipfs/${ipfs}`
             
             const response = await fetch(ipfs_gateway);
             const data = await response.json() as Project;
